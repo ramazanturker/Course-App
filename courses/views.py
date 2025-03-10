@@ -17,16 +17,22 @@ def create_course(request):
         form = CourseCreateForm(request.POST)
         
         if form.is_valid():
-            course = Course(
-                title=form.cleaned_data["title"], 
-                description=form.cleaned_data["description"], 
-                imageUrl=form.cleaned_data["imageUrl"], 
-                slug=form.cleaned_data["slug"])
-            course.save()
+            form.save()
             return redirect('/courses')
     else:
         form = CourseCreateForm()
     return render(request, 'courses/create-course.html', { "form": form })
+
+def course_list(request):
+    courses = Course.objects.all()
+    
+    return render(request, 'courses/course-list.html', {
+        'courses': courses
+    })
+    
+def course_edit(request, id):
+    pass
+    
     
 def search(request):
     if "q" in request.GET and request.GET["q"] != "":
