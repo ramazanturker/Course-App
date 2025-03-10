@@ -23,9 +23,9 @@ def create_course(request):
                 imageUrl=form.cleaned_data["imageUrl"], 
                 slug=form.cleaned_data["slug"])
             course.save()
-            return redirect('/course')
-            
-    form = CourseCreateForm()
+            return redirect('/courses')
+    else:
+        form = CourseCreateForm()
     return render(request, 'courses/create-course.html', { "form": form })
     
 def search(request):
