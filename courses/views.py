@@ -1,8 +1,7 @@
-from datetime import date, datetime
 from django.shortcuts import get_object_or_404, redirect, render
+from courses.forms import CourseCreateForm
 from .models import Course, Category
 from django.core.paginator import Paginator
-
 
 def index(request):
     courses = Course.objects.filter(isActive = 1, isHome=1)
@@ -15,38 +14,19 @@ def index(request):
     
 def create_course(request):
     if request.method == "POST":
-        title = request.POST["title"]
-        description = request.POST["description"]
-        imageUrl = request.POST["imageUrl"]
-        slug = request.POST["slug"]
-        isActive = request.POST.get("isActive", False)
-        isHome = request.POST.get("isHome", False)
+        form = CourseCreateForm(request.POST)
         
-        if isActive == "on":
-            isActive = True
+        if form.is_valid():
+            course = Course(
+                title=form.cleaned_data["title"], 
+                description=form.cleaned_data["description"], 
+                imageUrl=form.cleaned_data["imageUrl"], 
+                slug=form.cleaned_data["slug"])
+            course.save()
+            return redirect('/course')
             
-        if isHome == "on":
-            isHome = True
-        
-        error = False
-        message = ""
-        
-        if title == "":
-            error = True
-            message += "title is a required field"
-        
-        if len(title) < 5:
-            error = True
-            message += "you must enter at least five characters"
-        
-        if error:
-            return render(request, 'courses/create-course.html', { "error": True, "message": message })
-             
-        course = Course(title = title, description = description, imageUrl = imageUrl, slug = slug, isActive = isActive, isHome = isHome)
-        course.save()
-        return redirect("/courses")
-        
-    return render(request, 'courses/create-course.html')
+    form = CourseCreateForm()
+    return render(request, 'courses/create-course.html', { "form": form })
     
 def search(request):
     if "q" in request.GET and request.GET["q"] != "":
