@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block page_title %}
-    Create Course
+    Edit Course
 {% endblock %}
 
 {% block content %}
@@ -19,7 +19,7 @@
                         {{ message }}
                     </div>
                 {% endif %}
-                <form action="{% url 'create_course' %}" method="POST" novalidate>
+                <form method="POST" novalidate>
                     {% csrf_token %}
 
                     {% for field in form %}

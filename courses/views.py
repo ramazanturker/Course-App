@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from courses.forms import CourseCreateForm
+from courses.forms import CourseCreateForm, CourseEditForm
 from .models import Course, Category
 from django.core.paginator import Paginator
 
@@ -31,8 +31,25 @@ def course_list(request):
     })
     
 def course_edit(request, id):
-    pass
+    course = get_object_or_404(Course, pk=id)
     
+    if request.method == "POST":
+        form = CourseEditForm(request.POST, instance=course)
+        form.save()
+        return redirect("course_list")
+    else:
+        form = CourseEditForm(instance=course)
+    
+    return render(request, "courses/edit-course.html", { "form": form })
+
+def course_delete(request, id):
+    course = get_object_or_404(Course, pk=id)
+    
+    if request.method == "POST":
+        course.delete()
+        return redirect("course_list")
+    
+    return render(request, "courses/course-delete.html", { "course": course })
     
 def search(request):
     if "q" in request.GET and request.GET["q"] != "":
