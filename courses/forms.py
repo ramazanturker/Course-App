@@ -18,7 +18,7 @@ from courses.models import Course
 class CourseCreateForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ('title', 'description', 'imageUrl', 'slug')
+        fields = ('title', 'description', 'image', 'slug')
         labels = {
             'title': "course title",
             'description': "description"
@@ -26,7 +26,6 @@ class CourseCreateForm(forms.ModelForm):
         widgets = {
             "title": TextInput(attrs={ "class": "form-control" }),
             "description": Textarea(attrs={ "class": "form-control" }),
-            "imageUrl": TextInput(attrs={ "class": "form-control" }),
             "slug": TextInput(attrs={ "class": "form-control" }),
         }
         error_messages = {
@@ -42,7 +41,7 @@ class CourseCreateForm(forms.ModelForm):
 class CourseEditForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ('title', 'description', 'imageUrl', 'slug', 'categories', 'isActive')
+        fields = ('title', 'description', 'image', 'slug', 'categories', 'isActive')
         labels = {
             'title': "course title",
             'description': "description"
@@ -50,7 +49,6 @@ class CourseEditForm(forms.ModelForm):
         widgets = {
             "title": TextInput(attrs={ "class": "form-control" }),
             "description": Textarea(attrs={ "class": "form-control" }),
-            "imageUrl": TextInput(attrs={ "class": "form-control" }),
             "slug": TextInput(attrs={ "class": "form-control" }),
             "categories": SelectMultiple(attrs={ "class": "form-control" })
         }
@@ -63,3 +61,6 @@ class CourseEditForm(forms.ModelForm):
                 "required": "course description required"
             }
         }
+        
+class UploadForm(forms.Form):
+    image = forms.ImageField()

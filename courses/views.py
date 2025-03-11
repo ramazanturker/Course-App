@@ -1,7 +1,9 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from courses.forms import CourseCreateForm, CourseEditForm
-from .models import Course, Category
+from courses.forms import CourseCreateForm, CourseEditForm, UploadForm
+from .models import Course, Category, UploadModel
 from django.core.paginator import Paginator
+import random
+import os
 
 def index(request):
     courses = Course.objects.filter(isActive = 1, isHome=1)
@@ -14,7 +16,7 @@ def index(request):
     
 def create_course(request):
     if request.method == "POST":
-        form = CourseCreateForm(request.POST)
+        form = CourseCreateForm(request.POST, request.FILES)
         
         if form.is_valid():
             form.save()
@@ -34,7 +36,7 @@ def course_edit(request, id):
     course = get_object_or_404(Course, pk=id)
     
     if request.method == "POST":
-        form = CourseEditForm(request.POST, instance=course)
+        form = CourseEditForm(request.POST, request.FILES, instance=course)
         form.save()
         return redirect("course_list")
     else:
@@ -50,6 +52,18 @@ def course_delete(request, id):
         return redirect("course_list")
     
     return render(request, "courses/course-delete.html", { "course": course })
+
+def upload(request):
+    if request.method == "POST":
+        form = UploadForm(request.POST, request.FILES)
+        
+        if form.is_valid():
+            model = UploadModel(image=request.FILES["image"])
+            model.save()
+            return render(request, "courses/success.html")
+    else:
+        form = UploadForm()
+    return render(request, 'courses/upload.html', { "form": form })
     
 def search(request):
     if "q" in request.GET and request.GET["q"] != "":
