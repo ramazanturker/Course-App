@@ -26,12 +26,12 @@
                         {% for course in courses %}
                             <tr>
                                 <td>
-                                    <img src="{% static 'courses/img/'|add:course.image %}" class="img-fluid">
+                                    <img src="{{ course.image.url }}" class="img-fluid">
                                 </td>
                                 <td> {{ course.title }} </td>
                                 <td> {{ course.slug }} </td>
                                 <td>
-                                    <a href="{% url 'course_edit' course.id %}" class="btn btn-primary btn-sm"> update </a>
+                                    <a href="{% url 'course_edit' course.id %}" class="btn btn-primary btn-sm mb-1"> update </a>
                                     <a href="{% url 'course_delete' course.id %}" class="btn btn-danger btn-sm"> delete </a>
                                 </td>
                             </tr>
