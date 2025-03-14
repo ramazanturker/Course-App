@@ -18,6 +18,7 @@
             </div>
 
             <div class="col-9">
+                {% include 'courses/partials/_slider.html' %}
                 {% if courses|length == 0 %}
                     <div class="alert alert-warning">Course not found</div>
                 {% endif %}
