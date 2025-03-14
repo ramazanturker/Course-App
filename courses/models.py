@@ -8,7 +8,7 @@ class Category(models.Model):
     slug = models.SlugField(default="", null=False, unique=True, db_index=True, max_length=50)
     
     def __str__(self):
-        return f"{self.name}"
+        return f"{ self.name }"
 
 class Course(models.Model):
     title = models.CharField(max_length=50)
@@ -22,7 +22,16 @@ class Course(models.Model):
     categories = models.ManyToManyField(Category)
     
     def __str__(self):
-        return f"{self.title}"
+        return f"{ self.title }"
+    
+class Slider(models.Model):
+    title = models.CharField(max_length=100)
+    image = models.ImageField(upload_to="images")
+    is_active = models.BooleanField(default=False)
+    course = models.ForeignKey(Course, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    def __str__(self):
+        return f"{ self.title }"
     
 class UploadModel(models.Model):
     image = models.ImageField(upload_to="images")
